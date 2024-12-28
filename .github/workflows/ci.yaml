@@ -1,0 +1,77 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.11']
+        include:
+          - os: ubuntu-latest
+            target: linux
+            artifact_name: danmaku-linux
+            additional_parameters: ''
+          - os: macos-latest
+            target: macosx
+            artifact_name: danmaku-macos
+            additional_parameters: -w
+          - os: windows-latest
+            target: win
+            artifact_name: danmaku-win.exe
+            additional_parameters: -w --uac-admin
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip' 
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller src/main.py -F -d all ${{ matrix.additional_parameters }} -n ${{ matrix.artifact_name }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist/${{ matrix.artifact_name }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+
+      - name: Upload binaries
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            artifacts/danmaku-linux/danmaku-linux
+            artifacts/danmaku-macos/danmaku-macos
+            artifacts/danmaku-win.exe/danmaku-win.exe

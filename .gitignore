@@ -1,0 +1,8 @@
+pyvenv.cfg
+dist/
+build/
+Scripts/
+Include/
+Lib/
+__pycache__/
+*.pyc
