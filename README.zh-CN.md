@@ -56,18 +56,18 @@
 > Start-Process powershell -Verb RunAs # 启用Administrator权限
 
 > pip install -r requiremets.txt
-> python src/main.py # 在Windows下测试
+> python main.py # 在Windows下测试
 
-> pyinstaller src/main.py # 按照你的意愿添加编译选项
+> pyinstaller main.py # 按照你的意愿添加编译选项
 ```
 
 
 
 ```bash
 $ pip install -r requirements.txt
-$ sudo python src/main.py # 在Mac OS和Linux下测试
+$ sudo python main.py # 在Mac OS和Linux下测试
 
-$ pyinstaller src/main.py # 按照你的意愿添加编译选项
+$ pyinstaller main.py # 按照你的意愿添加编译选项
 ```
 
 当然，这绝对不是一个成熟的项目。我们真诚欢迎Issues和Pull Requests。

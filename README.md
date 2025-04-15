@@ -54,18 +54,18 @@ Just like most Python projects:
 > Start-Process powershell -Verb RunAs # Enable Administrator privilege
 
 > pip install -r requiremets.txt
-> python src/main.py # Test under Windows
+> python main.py # Test under Windows
 
-> pyinstaller src/main.py # Add parameters as you like
+> pyinstaller main.py # Add parameters as you like
 ```
 
 
 
 ```bash
 $ pip install -r requirements.txt
-$ sudo python src/main.py # Test under Mac OS & Linux
+$ sudo python main.py # Test under Mac OS & Linux
 
-$ pyinstaller src/main.py # Add parameters as you like
+$ pyinstaller main.py # Add parameters as you like
 ```
 
 Of course, it is definitely not a mature project. We sincerely welcome Issues and Pull Requests.

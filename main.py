@@ -4,8 +4,7 @@ import collections
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import Qt
 
-from src.danmaku_manager import DanmakuManager
-from src.danmaku_source import DanmakuSource
+from src.danmaku_window import DanmakuWindow
 
 from PyHotKey import Key, keyboard
 
@@ -17,16 +16,19 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowTransparentForInput)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        screen = QApplication.desktop().screenGeometry()
-        self.setGeometry(screen)
-        self.showFullScreen()
-
-        self.danmaku_manager = DanmakuManager()
-        self.setCentralWidget(self.danmaku_manager)
+        screen_count = QApplication.desktop().screenCount()
+        self.danmaku_windows = []
+        for i in range(screen_count):
+            danmaku_window = DanmakuWindow(i)
+            self.danmaku_windows.append(danmaku_window)
 
         keyboard.suppress_hotkey = True
-        id1 = keyboard.register_hotkey([Key.ctrl_l,Key.shift_l,"q"],None,self.close)
+        id1 = keyboard.register_hotkey([Key.ctrl_l,Key.shift_l,"q"],None,self.close_all)
 
+    def close_all(self):
+        for danmaku_window in self.danmaku_windows:
+            danmaku_window.close()
+        self.close()
 
 
 if __name__ == '__main__':
