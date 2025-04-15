@@ -17,16 +17,13 @@ class DanmakuManager(QWidget):
         self.min_spacing_ratio = 1
         self._calculate_available_positions()
 
-        self.danmaku_source = DanmakuSource()
-        self.danmaku_source.danmakuSignal.connect(self.add_danmaku)
-        self.danmaku_source.start()
 
     def _calculate_available_positions(self):
         """Calculates available vertical positions for danmaku."""
         self.available_y_queue.clear()
         max_available_height = self.height() // 4
         min_spacing = self.size().height() / 4 / 10 * self.min_spacing_ratio
-        available_y_positions = [];
+        available_y_positions = []
         for y in range(0, max_available_height, int(min_spacing)):
             available_y_positions.append(y)
         random.shuffle(available_y_positions)
