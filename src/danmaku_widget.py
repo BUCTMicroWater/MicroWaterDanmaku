@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QGraphicsDropShadowEffect
 from PyQt5.QtCore import QPoint, QPropertyAnimation
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QColor
 
 class DanmakuWidget(QLabel):
     def __init__(self, model, parent, start_pos, end_pos):
@@ -19,6 +19,14 @@ class DanmakuWidget(QLabel):
         if model.text_decoration:
              style_sheet += f"text-decoration: {model.text_decoration};"
         self.setStyleSheet(style_sheet)
+
+        # Add shadow effect
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(15)
+        shadow.setXOffset(0)
+        shadow.setYOffset(0)
+        shadow.setColor(QColor(0, 0, 0, 200)) # Black shadow with some transparency
+        self.setGraphicsEffect(shadow)
 
         self.adjustSize()
 

@@ -24,7 +24,6 @@ class DanmakuWindow(QMainWindow):
         screen_geometry = screens[index].geometry()
         
         # Set window geometry and show on correct screen
-        print(f"Setting geometry for screen {index}: {screen_geometry}")
         self.show()
         
         # Move to the correct screen explicitly
@@ -37,5 +36,4 @@ class DanmakuWindow(QMainWindow):
         self.setCentralWidget(self.danmaku_manager)
 
     def add_danmaku(self, model):
-        print("Index ",self.index," add_danmaku called")
         self.danmaku_manager.add_danmaku(model)
