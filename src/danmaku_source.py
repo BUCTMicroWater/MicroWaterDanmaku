@@ -61,6 +61,6 @@ class DanmakuSource(QThread):
 
         # The 'serve' function from 'websockets' library typically returns a context manager.
         # We assume 'server' object has a 'serve_forever' method.
-        with serve(echo, "localhost", 3210) as server:
-            print("Danmaku WebSocket server started on localhost:3210") # Added server start message
+        with serve(echo, "0.0.0.0", 3210) as server:
+            print("Danmaku WebSocket server started on 0.0.0.0:3210") # Added server start message
             server.serve_forever()
