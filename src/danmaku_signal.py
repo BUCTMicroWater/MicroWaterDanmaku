@@ -15,5 +15,8 @@ class DanmakuSignal(QObject):
     # The argument is the ID (str) of the danmaku to be deleted.
     danmaku_signal_delete: pyqtSignal = pyqtSignal(str)
 
+    # Signal emitted when a rescue request is received.
+    rescue_signal: pyqtSignal = pyqtSignal()
+
 # Global instance of the DanmakuSignal class for application-wide use.
 danmaku_signal: DanmakuSignal = DanmakuSignal()

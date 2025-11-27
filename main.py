@@ -11,6 +11,7 @@ from src.danmaku_window import DanmakuWindow
 from src.danmaku_source import DanmakuSource
 from src.danmaku_model import DanmakuModel
 from src.danmaku_signal import danmaku_signal
+from src.rescue_api import RescueAPI
 
 from PyHotKey import Key, keyboard
 
@@ -150,8 +151,8 @@ class MainWindow(QMainWindow):
         
         self.setCentralWidget(main_widget)
         
-        self.danmaku_source = DanmakuSource()
-        self.danmaku_source.start()
+        # self.danmaku_source = DanmakuSource()
+        # self.danmaku_source.start()
 
         keyboard.suppress_hotkey = True
         keyboard.register_hotkey([Key.ctrl_l,Key.shift_l,"q"],None,self.close_all)
@@ -170,7 +171,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event: QCloseEvent) -> None:
         """
         Handles the window close event.
-        Ensures all danmaku windows are closed and the danmaku source thread is properly terminated.
+        Ensures all danmaku windows are closed.
 
         Args:
             event (QCloseEvent): The close event.
@@ -178,11 +179,12 @@ class MainWindow(QMainWindow):
         for danmaku_window in self.danmaku_windows:
             danmaku_window.close()
         
-        if hasattr(self, 'danmaku_source') and self.danmaku_source.isRunning():
-            self.danmaku_source.quit()
-            if not self.danmaku_source.wait(3000): # Wait for 3 seconds
-                self.danmaku_source.terminate() # Force terminate if not quit
-                self.danmaku_source.wait() # Wait for termination
+        # DanmakuSource is now managed externally
+        # if hasattr(self, 'danmaku_source') and self.danmaku_source.isRunning():
+        #     self.danmaku_source.quit()
+        #     if not self.danmaku_source.wait(3000): # Wait for 3 seconds
+        #         self.danmaku_source.terminate() # Force terminate if not quit
+        #         self.danmaku_source.wait() # Wait for termination
         
         event.accept()
 
@@ -297,6 +299,42 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    
+    # Start DanmakuSource
+    danmaku_source = DanmakuSource()
+    danmaku_source.start()
+    
+    # Start RescueAPI
+    rescue_api = RescueAPI()
+    rescue_api.start()
+    
     main_window = MainWindow()
     main_window.show()
-    sys.exit(app.exec_())
+    
+    def restart_components():
+        global main_window
+        print("Restarting components...")
+        old_window = main_window
+        
+        # Create new window first to prevent app from quitting
+        main_window = MainWindow()
+        main_window.show()
+        
+        if old_window:
+            old_window.close()
+            old_window.deleteLater()
+            
+        print("Components restarted.")
+
+    danmaku_signal.rescue_signal.connect(restart_components)
+    
+    exit_code = app.exec_()
+    
+    # Cleanup
+    if danmaku_source.isRunning():
+        danmaku_source.quit()
+        danmaku_source.wait()
+        
+    rescue_api.stop()
+    
+    sys.exit(exit_code)
