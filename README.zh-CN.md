@@ -1,6 +1,8 @@
 # 微水弹幕姬
 [[English](README.md)|简体中文]
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/BUCTMicroWater/MicroWaterDanmaku)
+
 基于PyQt5构建的实时桌面弹幕服务。 灵感来自由北京大学元火动漫社开发的[弹幕服务](https://github.com/PKUOriginalFire/DanmakuLight)。
 
 
