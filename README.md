@@ -1,6 +1,8 @@
 # MicroWater Danmaku Sprite
 [English|[简体中文](README.zh-CN.md)]
+
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/BUCTMicroWater/MicroWaterDanmaku)
+
 Real-time desktop danmaku service, built with PyQt5. Inspired by [the danmaku service](https://github.com/PKUOriginalFire/DanmakuLight) from the Peking University Original Fire Anime Club.
 
 
